@@ -1,51 +1,61 @@
 
-<div style="opacity:97%;background-image: url(../assets/img/fondo.jpg);background-position: center;width: 100vw;height: 100vh;background-size: cover;overflow: hidden;">
-  <div class="row" style="display: flex;justify-content: flex-end; margin: 10px;">
+<div id="principal"  class="cuerpo" (scroll)="mas($event)" >
+  <div class="row busqueda">
     <div class="col col-12 col-md-4 col-sm-8 col-xs-10">
       <div class="input-group ">
         <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-        <input class="form-control" placeholder="Busqueda..." >
+        <input [(ngModel)]="nameSearch" #txtBuscar (keyup.enter)="buscarProducto(txtBuscar.value)" class="form-control" placeholder="Busqueda..." >
       </div>
     </div>
   </div>
+  <div class="row texto">
+    <div class="col col-12 col-md-4 col-sm-8 col-xs-10">
+        <span style="color: white; text-align: right;">{{this.serviceRYM.total}} resultados</span>     
+    </div>
+  </div>
+  <br>
+  <br>
   <br>
   <div class="row" >
     <div class="col col-12 col-md-12 col-sm-12 col-xs-12">
       <h1>Rick and Morthy</h1>
     </div>
   </div>
-  <div class="row" >
-    <div class="col card">
-      <img src="../assets/img/fondo.jpg">
-      <div style="padding: 10px;">
-        <h5>Rick and Morthy</h5>
-        <p><i class="fas fa-circle"></i> Desconocido-Humanoide</p>
-        <h5>Ultima ubicacion conocida</h5>
-        <p>Ciudadela de Ricks</p>
-        <h5>primera aparicion</h5>
-        <p>Capitulo 12</p>
+  <div id="scroll" class="grid" >
+    <div *ngFor="let item of this.serviceRYM.allCharacters" class="card">
+      <div style="overflow: hidden;">
+        <img src="{{item.image}}" style="width: 100%; height: 100%;">
       </div>
-      
-    </div>
-    <div class="col card">
-      <img src="../assets/img/fondo.jpg">
-      <h1>Rick and Morthy</h1>
-    </div>
-    <div class="col card">
-      <img src="../assets/img/fondo.jpg">
-      <h1>Rick and Morthy</h1>
-    </div>
-    <div class="col card">
-      <img src="../assets/img/fondo.jpg">
-      <h1>Rick and Morthy</h1>
-    </div>
-    <div class="col card">
-      <img src="../assets/img/fondo.jpg">
-      <h1>Rick and Morthy</h1>
-    </div>
-    <div class="col card">
-      <img src="../assets/img/fondo.jpg">
-      <h1>Rick and Morthy</h1>
+      <div style="padding: 10px 10px 0px 10px;">
+        <h5>{{item.name}}</h5>
+        <p>
+          <i *ngIf="item.status=='Alive'" style="color: green;" class="fas fa-circle"></i>
+          <i *ngIf="item.status=='Dead'" style="color: red;" class="fas fa-circle"></i>
+          <i *ngIf="item.status=='unknown'" class="fas fa-circle"></i> {{item.status}}-{{item.species}}
+        </p>
+        <h5>Ultima ubicacion conocida</h5>
+        <p>{{item.location.name}}</p>
+        <p>Id - {{item.id}}</p>
+      </div>
+      <div  style="text-align: right;display: block ;background: rgb(98, 98, 98);opacity: 50%;padding-right: 5%;">
+        <i *ngIf="item.gender=='Male'" style="color: blue; font-size:25px;" class="fas fa-mars"></i>
+        <i *ngIf="item.gender!='Male'" style="color: palevioletred;font-size: 25px;" class="fas fa-venus"></i>
+      </div>
     </div>
   </div>
+
+
+
+  <div class="background-img">
+		<div class="space"></div>
+			<div class="wrapper">
+				<div class="img-wrapper">
+					<span>44</span>
+				</div>
+				<p>The page you are trying to search has been <br> moved to another universe.</p>
+		
+			</div>
+		</div>
+
+
 </div>
