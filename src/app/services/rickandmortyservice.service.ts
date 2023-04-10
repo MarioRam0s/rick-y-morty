@@ -42,6 +42,7 @@ export class RickandmortyserviceService {
          this.pages = resp.info.pages;
          resolve(true)
        },error=>{
+        this.total = 0;
         reject(false);
        });
       })
