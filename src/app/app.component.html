@@ -1,30 +1,32 @@
+<div id="principal" class="cuerpo" (scroll)="mas($event)">
 
-<div id="principal"  class="cuerpo" (scroll)="mas($event)" >
-  <div class="row busqueda">
-    <div class="col col-12 col-md-4 col-sm-8 col-xs-10">
-      <div class="input-group ">
-        <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-        <input [(ngModel)]="nameSearch" #txtBuscar (keyup.enter)="buscarProducto(txtBuscar.value)" class="form-control" placeholder="Busqueda..." >
+  <div style="display: flex; justify-content: flex-end;">
+    <div class="row busqueda">
+      <div class="col col-12 col-md-4 col-sm-8 col-xs-10" style="display: contents;">
+        <div class="input-group ">
+          <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+          <input [(ngModel)]="nameSearch" #txtBuscar (keyup.enter)="buscarProducto(txtBuscar.value)"
+            class="form-control " placeholder="Busqueda...">
+        </div>
+        <span style="color: white; text-align: right;">{{this.serviceRYM.total}} resultados</span>
       </div>
     </div>
   </div>
-  <div class="row texto">
-    <div class="col col-12 col-md-4 col-sm-8 col-xs-10">
-        <span style="color: white; text-align: right;">{{this.serviceRYM.total}} resultados</span>     
-    </div>
-  </div>
+
   <br>
   <br>
   <br>
-  <div class="row" >
+
+  <div class="row">
     <div class="col col-12 col-md-12 col-sm-12 col-xs-12">
       <h1>Rick and Morthy</h1>
     </div>
   </div>
-  <div id="scroll" class="grid" >
+
+  <div *ngIf="this.notfound" id="scroll" class="grid">
     <div *ngFor="let item of this.serviceRYM.allCharacters" class="card">
       <div style="overflow: hidden;">
-        <img src="{{item.image}}" style="width: 100%; height: 100%;">
+        <img class="fotopersonaje" src="{{item.image}}" style="width: 100%; height: 100%;">
       </div>
       <div style="padding: 10px 10px 0px 10px;">
         <h5>{{item.name}}</h5>
@@ -35,27 +37,34 @@
         </p>
         <h5>Ultima ubicacion conocida</h5>
         <p>{{item.location.name}}</p>
-        <p>Id - {{item.id}}</p>
+        <h5>Id - {{item.id}}</h5>
       </div>
-      <div  style="text-align: right;display: block ;background: rgb(98, 98, 98);opacity: 50%;padding-right: 5%;">
+      <div style="text-align: right;display: block ;background: rgb(98, 98, 98);opacity: 50%;padding-right: 5%;">
         <i *ngIf="item.gender=='Male'" style="color: blue; font-size:25px;" class="fas fa-mars"></i>
         <i *ngIf="item.gender!='Male'" style="color: palevioletred;font-size: 25px;" class="fas fa-venus"></i>
       </div>
     </div>
+    <div *ngIf="this.serviceRYM.cargando" class="loading">
+      <p style="font-style: italic;font-size:x-large;color: #fff;">Cargando Universo...</p>
+      <div>
+        <img class="rotarLoading" src="../assets/img/pegatina-ricky-y-morti-portal.png" width="100%" height="100%">
+      </div>
+    </div>
   </div>
 
+  <div class="space2"></div>
+  <div class="space3"></div>
 
-
-  <div class="background-img">
-		<div class="space"></div>
-			<div class="wrapper">
-				<div class="img-wrapper">
-					<span>44</span>
-				</div>
-				<p>The page you are trying to search has been <br> moved to another universe.</p>
-		
-			</div>
-		</div>
-
+  <div *ngIf="!this.notfound">
+    <div class="background-img">
+      <div class="space"></div>
+      <div class="wrapper">
+        <div class="img-wrapper">
+          <span class="notfound">44</span>
+        </div>
+        <p class="alerta">La página que intenta buscar ha sido <br>trasladada a otro universo. </p>
+      </div>
+    </div>
+  </div>
 
 </div>

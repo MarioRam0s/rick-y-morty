@@ -1,42 +1,37 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable }                       from '@angular/core';
+import { HttpClient }                       from '@angular/common/http';
 import { Character, allCharacterInterface } from '../interface/character.interface';
-import { Episode } from '../interface/episode.interface';
+import { Episode }                          from '../interface/episode.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RickandmortyserviceService {
 
-  allCharacters: Character[] = [];
-  searchCharacters: Character[] = [];
-  total: number | undefined;
-  pages : number | undefined;
-  allEpisode: Episode[] = [];
-  flat = false;
-  cont : number =2;
+  allCharacters   : Character [] = [];
+  searchCharacters: Character [] = [];
+  allEpisode      : Episode   [] = [];
+  total           : number | undefined;
+  pages           : number | undefined;
+  contPages       : number = 2;
+  cargando                 = false;
+
   constructor(private http: HttpClient) {
-    this.getAllCharacter();
+    this.getAllCharacter().then();
     this.episodes();
   }
 
   private getAllCharacter() {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       this.http.get<allCharacterInterface>('https://rickandmortyapi.com/api/character').subscribe((resp: allCharacterInterface) => {
         this.allCharacters = resp.results;
         this.total = resp.info.count;
         this.pages = resp.info.pages;
+        resolve(true)
+      },error=>{
+       reject(true);
       });
-      resolve();
-    })
-  }
-  private getEpisode() {
-    return new Promise<void>((resolve, rejects) => {
-      this.http.get<Episode[]>('https://rickandmortyapi.com/api/episode').subscribe((resp: Episode[]) => {
-        this.allEpisode = resp;
-      });
-      resolve();
-    })
+     })
   }
 
   private  getByName(termino: string) {
@@ -53,13 +48,47 @@ export class RickandmortyserviceService {
   }
 
   busquedaPorNombre (termino: string){
+    this.contPages=2;
     if(termino!=''){
-      this.cont=2;
       return this.getByName(termino);
     }else{
-      this.cont=2;
-      this.getAllCharacter().then();
+      return this.getAllCharacter();
     }
+  }
+
+  moreCharacters (termino : string) {
+    if(this.contPages<=this.pages && this.pages>=2){
+      return this.getNextPageCharacter(termino);
+    }
+    this.cargando=false;
+      return new Promise<boolean>((resolve, rejects) => {
+        resolve(false);
+        rejects(false);
+      }).then();
+    
+    
+  }
+
+  private getNextPageCharacter(termino : string) : Promise<boolean>{
+    return new Promise<boolean>((resolve, reject) => {
+      this.http.get<allCharacterInterface>(`https://rickandmortyapi.com/api/character/?page=${this.contPages}&name=${termino}`).subscribe((resp:allCharacterInterface)=>{
+        this.allCharacters.push(...resp.results);
+        this.contPages++;
+        this.cargando=false;
+        resolve(true);
+      },error=>{
+        reject(false);
+      })
+    })
+  }
+
+  private getEpisode() {
+    return new Promise<void>((resolve, rejects) => {
+      this.http.get<Episode[]>('https://rickandmortyapi.com/api/episode').subscribe((resp: Episode[]) => {
+        this.allEpisode = resp;
+      });
+      resolve();
+    })
   }
 
   episodes() {
@@ -67,21 +96,5 @@ export class RickandmortyserviceService {
       this.getEpisode().then((resp) => {
       });
     }
-  }
-
-  moreCharacters(termino : string){
-    if(this.cont<=this.pages && this.pages>=2){
-      this.getNextPageCharacter(termino).then();
-    }
-  }
-
-  private getNextPageCharacter(termino : string){
-    return new Promise<void>((resolve, reject) => {
-      this.http.get<allCharacterInterface>(`https://rickandmortyapi.com/api/character/?page=${this.cont}&name=${termino}`).subscribe((resp:allCharacterInterface)=>{
-        this.allCharacters.push(...resp.results);
-        this.cont++;
-      });
-      resolve();
-    })
   }
 }
