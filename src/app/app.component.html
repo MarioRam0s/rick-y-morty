@@ -5,8 +5,8 @@
       <div class="col col-12 col-md-4 col-sm-8 col-xs-10" style="display: contents;">
         <div class="input-group ">
           <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-          <input [(ngModel)]="nameSearch" #txtBuscar  (focusout)="buscarProducto(txtBuscar.value)" (keyup.enter)="buscarProducto(txtBuscar.value)"
-            class="form-control " placeholder="Busqueda...">
+          <input [(ngModel)]="nameSearch" #txtBuscar (focusout)="buscarProducto(txtBuscar.value)"
+            (keyup.enter)="buscarProducto(txtBuscar.value)" class="form-control " placeholder="Busqueda...">
         </div>
         <span style="color: white; text-align: right;">{{this.serviceRYM.total}} resultados</span>
       </div>
@@ -51,9 +51,6 @@
       </div>
     </div>
   </div>
-
-  <div class="space2"></div>
-  <div class="space3"></div>
 
   <div *ngIf="!this.notfound">
     <div class="background-img">
